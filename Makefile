@@ -3,7 +3,7 @@ INFO_COLOR = \033[1;32m
 WARN_COLOR = \033[1;33m
 NO_COLOR = \033[0m
 
-FEATURE_NAME=script-to-audio
+FEATURE_NAME=s2t-deepspeech
 
 AWS_ACCOUNT=283419117448
 BUCKET_NAME=ab-${AWS_ACCOUNT}-${FEATURE_NAME}
@@ -31,6 +31,10 @@ test:
 
 init:
 	@pip install -r ./requirements.txt
+
+download-models:
+	@curl -LO https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.pbmm
+	@curl -LO https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer
 
 config:
 	@printf "AWS_ACCOUNT: ${AWS_ACCOUNT}\n"

@@ -254,3 +254,8 @@ packaged.yaml
 
 ### Random ###
 **/_scratch.py
+
+
+### pre-trained model files ###
+*.pbmm
+*.scorer
