@@ -1,0 +1,32 @@
+#!/bin/zs
+
+##################
+###### AUTH ######
+##################
+EM_PROJECT_ROOT=~/emotion-map/emotion-map-data
+EM_TWITTER_BEARER_TOKEN_FILE=/credentials/twitter-api-bearer-token
+
+
+# NOTE: Dependency on jq package `brew install jq`
+function em-regen-bearer-token {
+  source $EM_PROJECT_ROOT/credentials/twitter-api-secrets
+  # http get https://api.twitter.com/oauth2/token \
+  new_access_token=$(http --form --print=b -a "$TWITTER_API_KEY:$TWITTER_API_SECRET" \
+    POST 'https://api.twitter.com/oauth2/token' \
+    grant_type=client_credentials | jq '.access_token' | sed -e 's/^\"//' -e 's/\"$//')
+  echo ${BB_GLOBAL_COLORS_GREEN}Access Token Granted:${BB_GLOBAL_COLORS_NO_COLOR} ${new_access_token:0:30}...
+  echo $new_access_token > $EM_PROJECT_ROOT$EM_TWITTER_BEARER_TOKEN_FILE
+}
+
+function em-get-bearer-token {
+  echo $(cat $EM_PROJECT_ROOT$EM_TWITTER_BEARER_TOKEN_FILE)
+}
+
+
+function em-search-geos {
+  local query_string=${1:?"REQUIRED PARAM: query_string  i.e.'query==Toronto granularity==neighborhood trim_place==false'"}
+  local token=$(em-get-bearer-token)
+  http GET https://api.twitter.com/1.1/geo/search.json \
+    "Authorization:Bearer $token" \
+    $query_string
+}

@@ -1,0 +1,4 @@
+[flake8]
+ignore = E265,E266,E302
+max-line-length = 120
+exclude = tests/*,.aws-sam,**/td_ameritrade_python_api/**,secrets.py
