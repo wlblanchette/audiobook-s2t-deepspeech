@@ -10,6 +10,7 @@ BUCKET_NAME=ab-${AWS_ACCOUNT}-${FEATURE_NAME}
 BUCKET_URL=s3://${BUCKET_NAME}
 STACK_NAME=${FEATURE_NAME}
 AWS_PROFILE=audiobook-tools-dev
+ECR_REPOSITORY_URI=${AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/polyjuice-ml
 
 #################
 #
@@ -40,13 +41,20 @@ config:
 	@printf "AWS_ACCOUNT: ${AWS_ACCOUNT}\n"
 	@printf "BUCKET_URL: ${BUCKET_URL}\n"
 
+ecr-login:
+	@aws ecr get-login-password --region us-east-1 | docker login --username AWS \
+--password-stdin $(AWS_ACCOUNT).dkr.ecr.us-east-1.amazonaws.com
+
 deploy:
 	@printf "${INFO_COLOR}Building...${NO_COLOR}\n" && \
 	sam build --use-container && \
 	printf "${INFO_COLOR}Packaging...${NO_COLOR}\n" && \
-	sam package --output-template-file packaged.yaml --s3-bucket ${BUCKET_NAME} --profile ${AWS_PROFILE} && \
+	sam package --output-template-file packaged.yaml --s3-bucket ${BUCKET_NAME} --profile ${AWS_PROFILE} --image-repository ${ECR_REPOSITORY_URI} && \
 	printf "${INFO_COLOR}Deploying...${NO_COLOR}\n" && \
-	sam deploy --template-file packaged.yaml --region us-east-1 --capabilities CAPABILITY_IAM --stack-name ${STACK_NAME} --profile ${AWS_PROFILE}
+	sam deploy --template-file packaged.yaml --region us-east-1 --capabilities CAPABILITY_IAM --stack-name ${STACK_NAME} --profile ${AWS_PROFILE} --image-repository ${ECR_REPOSITORY_URI}
+
+deploy-packaged:
+	@sam deploy --template-file packaged.yaml --region us-east-1 --capabilities CAPABILITY_IAM --stack-name ${STACK_NAME} --profile ${AWS_PROFILE} --image-repository ${ECR_REPOSITORY_URI}
 
 # deploy-keys:
 # 	@python -m keys.deploy_keys --ignore TD_AMERITRADE,TRADESTATION
@@ -66,3 +74,7 @@ invoke:
 test-poc:
 	@http POST https://xmnhv13j2d.execute-api.us-east-1.amazonaws.com/Prod/hello \
 	  name=fred
+
+test-inference:
+	@http POST https://7p9arazyci.execute-api.us-east-1.amazonaws.com/Prod/deepspeech \
+	  audio_s3_path=project-files/TEST_PROJECT/sherlock-holmes-sample.wav

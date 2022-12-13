@@ -1,26 +1,59 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  aws-trading
-
-  Sample SAM Template for aws-trading
+  audiobook-s2t-deepspeech
+  - b)	HTTP API (ml-inference): Perform an inference using DeepSpeech on audio.
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 15
+    Timeout: 300
+
+Parameters:
+  AudioBucketName:
+    Type: String
+    Description: S3 bucket for audio
+    Default: ab-283419117448-s2t-audio
 
 Resources:
-  # Lambda
+  InferenceFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      MemorySize: 3008  # 4096, change once memory quota is upgraded: https://docs.aws.amazon.com/lambda/latest/dg/troubleshooting-deployment.html#troubleshooting-deployment-quotas
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref AudioBucketName
+      Events:
+        http:
+          Type: Api
+          Properties:
+            Path: /deepspeech
+            Method: POST
+        warm:
+          Type: Schedule
+          Properties:
+            Schedule: rate(5 minutes)
+            Input: |
+              { "isWarmerEvent": true }
+    Metadata:
+      DockerContext: ./ml-inference
+      Dockerfile: Dockerfile
+      DockerTag: python3.8-v1
+
   PocFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: ./
-      Handler: src.poc.handler
+      CodeUri: poc/
+      Environment:
+        Variables:
+          AUDIO_BUCKET: !Ref AudioBucketName
+      Handler: app.handler
       Role: !GetAtt PocFunctionRole.Arn
+      MemorySize: 512
       Runtime: python3.8
       Events:
-        HelloWorld:
+        http:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /hello
@@ -50,6 +83,6 @@ Outputs:
   PocFunctionApi:
     Description: "API Gateway endpoint URL for Prod stage for Hello World function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello"
-  PocFunction:
-    Description: "Tradingview Ingest Lambda Function ARN"
-    Value: !GetAtt PocFunction.Arn
+  InferenceApi:
+    Description: "API Gateway endpoint URL for Prod stage for Inference function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/deepspeech"
