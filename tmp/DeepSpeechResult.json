@@ -1,0 +1,361 @@
+{
+  "transcripts": [{
+    "confidence": -180.84182739257812,
+    "words": [{
+        "word": "by",
+        "start_time": 0.92,
+        "duration": 0.14
+      },
+      {
+        "word": "degrees",
+        "start_time": 1.1,
+        "duration": 0.48
+      },
+      {
+        "word": "mister",
+        "start_time": 1.64,
+        "duration": 0.22
+      },
+      {
+        "word": "duncan",
+        "start_time": 1.92,
+        "duration": 0.32
+      },
+      {
+        "word": "ross",
+        "start_time": 2.3,
+        "duration": 0.3
+      },
+      {
+        "word": "took",
+        "start_time": 2.64,
+        "duration": 0.18
+      },
+      {
+        "word": "to",
+        "start_time": 2.88,
+        "duration": 0.08
+      },
+      {
+        "word": "coming",
+        "start_time": 3.02,
+        "duration": 0.24
+      },
+      {
+        "word": "in",
+        "start_time": 3.34,
+        "duration": 0.06
+      },
+      {
+        "word": "only",
+        "start_time": 3.48,
+        "duration": 0.2
+      },
+      {
+        "word": "once",
+        "start_time": 3.88,
+        "duration": 0.14
+      },
+      {
+        "word": "of",
+        "start_time": 4.1,
+        "duration": 0.1
+      },
+      {
+        "word": "a",
+        "start_time": 4.28,
+        "duration": 0.04
+      },
+      {
+        "word": "morning",
+        "start_time": 4.36,
+        "duration": 0.72
+      },
+      {
+        "word": "and",
+        "start_time": 5.22,
+        "duration": 0.12
+      },
+      {
+        "word": "then",
+        "start_time": 5.36,
+        "duration": 0.16
+      },
+      {
+        "word": "after",
+        "start_time": 5.6,
+        "duration": 0.22
+      },
+      {
+        "word": "a",
+        "start_time": 5.9,
+        "duration": 0.06
+      },
+      {
+        "word": "time",
+        "start_time": 6.04,
+        "duration": 0.14
+      },
+      {
+        "word": "he",
+        "start_time": 6.22,
+        "duration": 0.1
+      },
+      {
+        "word": "did",
+        "start_time": 6.36,
+        "duration": 0.12
+      },
+      {
+        "word": "not",
+        "start_time": 6.52,
+        "duration": 0.14
+      },
+      {
+        "word": "come",
+        "start_time": 6.72,
+        "duration": 0.14
+      },
+      {
+        "word": "in",
+        "start_time": 6.92,
+        "duration": 0.08
+      },
+      {
+        "word": "at",
+        "start_time": 7.08,
+        "duration": 0.12
+      },
+      {
+        "word": "all",
+        "start_time": 7.36,
+        "duration": 0.7
+      },
+      {
+        "word": "still",
+        "start_time": 8.16,
+        "duration": 0.18
+      },
+      {
+        "word": "of",
+        "start_time": 8.46,
+        "duration": 0.06
+      },
+      {
+        "word": "course",
+        "start_time": 8.58,
+        "duration": 0.22
+      },
+      {
+        "word": "i",
+        "start_time": 8.9,
+        "duration": 0.08
+      },
+      {
+        "word": "never",
+        "start_time": 9.08,
+        "duration": 0.26
+      },
+      {
+        "word": "dared",
+        "start_time": 9.42,
+        "duration": 0.2
+      },
+      {
+        "word": "to",
+        "start_time": 9.68,
+        "duration": 0.1
+      },
+      {
+        "word": "leave",
+        "start_time": 9.82,
+        "duration": 0.16
+      },
+      {
+        "word": "the",
+        "start_time": 10.04,
+        "duration": 0.1
+      },
+      {
+        "word": "room",
+        "start_time": 10.2,
+        "duration": 0.22
+      },
+      {
+        "word": "for",
+        "start_time": 10.48,
+        "duration": 0.1
+      },
+      {
+        "word": "an",
+        "start_time": 10.64,
+        "duration": 0.06
+      },
+      {
+        "word": "instant",
+        "start_time": 10.78,
+        "duration": 0.7
+      },
+      {
+        "word": "for",
+        "start_time": 11.54,
+        "duration": 0.08
+      },
+      {
+        "word": "i",
+        "start_time": 11.66,
+        "duration": 0.02
+      },
+      {
+        "word": "was",
+        "start_time": 11.72,
+        "duration": 0.18
+      },
+      {
+        "word": "not",
+        "start_time": 11.94,
+        "duration": 0.16
+      },
+      {
+        "word": "sure",
+        "start_time": 12.18,
+        "duration": 0.14
+      },
+      {
+        "word": "when",
+        "start_time": 12.44,
+        "duration": 0.1
+      },
+      {
+        "word": "he",
+        "start_time": 12.58,
+        "duration": 0.14
+      },
+      {
+        "word": "might",
+        "start_time": 12.78,
+        "duration": 0.28
+      },
+      {
+        "word": "come",
+        "start_time": 13.12,
+        "duration": 0.6
+      },
+      {
+        "word": "and",
+        "start_time": 13.84,
+        "duration": 0.12
+      },
+      {
+        "word": "the",
+        "start_time": 14.06,
+        "duration": 0.08
+      },
+      {
+        "word": "bill",
+        "start_time": 14.18,
+        "duration": 0.12
+      },
+      {
+        "word": "it",
+        "start_time": 14.32,
+        "duration": 0.08
+      },
+      {
+        "word": "was",
+        "start_time": 14.44,
+        "duration": 0.08
+      },
+      {
+        "word": "such",
+        "start_time": 14.54,
+        "duration": 0.12
+      },
+      {
+        "word": "a",
+        "start_time": 14.76,
+        "duration": 0.04
+      },
+      {
+        "word": "good",
+        "start_time": 14.86,
+        "duration": 0.18
+      },
+      {
+        "word": "one",
+        "start_time": 15.12,
+        "duration": 0.12
+      },
+      {
+        "word": "and",
+        "start_time": 15.38,
+        "duration": 0.08
+      },
+      {
+        "word": "suited",
+        "start_time": 15.52,
+        "duration": 0.26
+      },
+      {
+        "word": "me",
+        "start_time": 15.84,
+        "duration": 0.18
+      },
+      {
+        "word": "so",
+        "start_time": 16.08,
+        "duration": 0.16
+      },
+      {
+        "word": "well",
+        "start_time": 16.32,
+        "duration": 0.6
+      },
+      {
+        "word": "that",
+        "start_time": 16.98,
+        "duration": 0.08
+      },
+      {
+        "word": "i",
+        "start_time": 17.12,
+        "duration": 0.02
+      },
+      {
+        "word": "would",
+        "start_time": 17.24,
+        "duration": 0.18
+      },
+      {
+        "word": "not",
+        "start_time": 17.46,
+        "duration": 0.16
+      },
+      {
+        "word": "risk",
+        "start_time": 17.68,
+        "duration": 0.26
+      },
+      {
+        "word": "the",
+        "start_time": 18.0,
+        "duration": 0.12
+      },
+      {
+        "word": "loss",
+        "start_time": 18.16,
+        "duration": 0.2
+      },
+      {
+        "word": "of",
+        "start_time": 18.42,
+        "duration": 0.08
+      },
+      {
+        "word": "it",
+        "start_time": 18.58,
+        "duration": 0.02
+      }
+    ]
+  }]
+}

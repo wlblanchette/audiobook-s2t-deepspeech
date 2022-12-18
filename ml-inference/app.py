@@ -35,10 +35,16 @@ def get_audio_file(audio_s3_path) -> Tuple[float, Any]:
     audio_buffer = np.frombuffer(wav.readframes(wav.getnframes()), np.int16)
     return audio_length, audio_buffer
 
-# takes longer
+# TODO: refactor this to respond to S3 events in transcoded project directories
+#       and create corresponding metadata files.
+#       Should explore some of this writing too https://datatalks.club/blog/ml-deployment-lambda.html#future-enhancements-and-tradeoffs.
 def lambda_handler(event, context):
     if isPing(event):
-        print(f'------ cache active: {CACHE_KEY in MODEL_CACHE} ------')
+        print(f'------ cache was active: {CACHE_KEY in MODEL_CACHE} ------')
+        if CACHE_KEY not in MODEL_CACHE:
+            print(f"[lambda_handler] model not cached")
+            MODEL_CACHE[CACHE_KEY] = Model(MODEL_PATH)
+        print(f'------ cache is now active: {CACHE_KEY in MODEL_CACHE} ------')
         print(f'------ function is warm  ------')
         return
 
