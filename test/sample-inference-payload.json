@@ -1,0 +1,8 @@
+{
+  "Records": [{
+    "s3": {
+      "bucket": { "name": "ab-283419117448-s2t-audio" },
+      "object": { "key": "SAMPLE_KEY" }
+    }
+  }]
+}

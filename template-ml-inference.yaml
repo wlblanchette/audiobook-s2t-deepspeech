@@ -48,3 +48,6 @@ Outputs:
   InferenceApi:
     Description: "API Gateway endpoint URL for Prod stage for Inference function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/deepspeech"
+  InferenceFunction:
+    Description: "InferenceFunction Function ARN"
+    Value: !GetAtt InferenceFunction.Arn

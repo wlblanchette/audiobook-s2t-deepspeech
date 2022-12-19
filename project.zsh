@@ -8,7 +8,6 @@ FEATURE_NAME=s2t-deepspeech
 AWS_ACCOUNT=283419117448
 BUCKET_NAME=ab-${AWS_ACCOUNT}-${FEATURE_NAME}
 BUCKET_URL=s3://${BUCKET_NAME}
-STACK_NAME=${FEATURE_NAME}
 AWS_PROFILE=audiobook-tools-dev
 ECR_REPOSITORY_URI=${AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/polyjuice-ml
 
@@ -37,15 +36,22 @@ function pj_clean_sam() {
 function pj_clean_all() {
   find . -path "*.egg-info" -exec rm -r {} \;
   find . -path "*build*" -exec rm -r {} \;
-  rm -r .aws-sam
+  pj_clean_sam
+  pip uninstall polyjuice-common -y
+}
+
+function pj_refresh_common() {
+  pip uninstall polyjuice-common -y
+  pip install -r requirements-dev.txt
 }
 
 
 ### Deployments and Testing ###
 function pj_deploy() {
-  readonly template_name=${1:?"template path"}
+  readonly subproject=${1:?"subproject is required, i.e. template-{subproject}.yaml"}
   readonly parameter_overrides=${2}
-  STACK_NAME="$FEATURE_NAME--$subproject"
+  local template_name="template-$subproject.yaml"
+  local stack_name="$FEATURE_NAME--$subproject"
 
   echo "🌴 Configuration"
   echo "----------------"
@@ -54,13 +60,13 @@ function pj_deploy() {
   echo "AWS Account: $AWS_ACCOUNT"
   echo "AWS Profile: $AWS_PROFILE"
   echo "Bucket Name: $BUCKET_NAME"
-  echo "Stack Name: $STACK_NAME"
+  echo "Stack Name: $stack_name"
   echo "----------------"
 
   # TODO: this is only necessary when local moduels are shared
   #       via pip installation
-  echo "🌴 ${INFO_COLOR}pip...${NO_COLOR}\n"
-  pip install -r requirements-dev.txt
+  # echo "🌴 ${INFO_COLOR}pip...${NO_COLOR}\n"
+  # pip install -r requirements-dev.txt
 
   echo "🌴 ${INFO_COLOR}Building...${NO_COLOR}\n"
   sam build -t $template_name --use-container
@@ -76,7 +82,7 @@ function pj_deploy() {
   deploy_cmd+="--template-file packaged.yaml "
   deploy_cmd+="--region us-east-1 "
   deploy_cmd+="--capabilities CAPABILITY_IAM "
-  deploy_cmd+="--stack-name ${STACK_NAME} "
+  deploy_cmd+="--stack-name ${stack_name} "
   deploy_cmd+="--profile ${AWS_PROFILE} "
   deploy_cmd+="--image-repository ${ECR_REPOSITORY_URI} "
   if [[ -n $parameter_overrides ]]
@@ -89,14 +95,14 @@ function pj_deploy() {
   eval $deploy_cmd
 }
 
-function pj_config() {
-	echo "AWS_ACCOUNT: ${AWS_ACCOUNT}"
-	echo "BUCKET_URL: ${BUCKET_URL}"
-}
 
-# ---- Project specific ----
+
+##############################
+# ---- Project specific ---- #
+##############################
+
 function pj_deploy_ml_inference() {
-  pj_deploy template-ml-inference.yaml
+  pj_deploy ml-inference
 }
 
 function pj_download_models() {

@@ -4,6 +4,9 @@ FROM public.ecr.aws/lambda/python:3.8
 # Copy the dir into container
 COPY ./ ./
 
+# RUN cat /etc/os-release
+RUN yum install -y git
+
 # Install the python requirements from requirements.txt
 RUN python3.8 -m pip install -r requirements.txt
 
