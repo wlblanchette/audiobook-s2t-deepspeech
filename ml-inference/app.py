@@ -5,7 +5,7 @@ import os
 import wave
 from deepspeech import Model
 from timeit import default_timer as timer
-from typing import Dict, Tuple, Any
+from typing import Dict, Tuple, Any, Callable
 
 from polyjuice_common import s3 as pjs3, sns as pjsns, common as pjcommon
 
@@ -22,8 +22,23 @@ get_output_dir = lambda project_id: pjs3.get_project_path(project_id, "ml-audio-
 MODEL_CACHE: Dict[str, Model] = {}
 CACHE_KEY = 'MODEL'
 
-def isPing(event):
-    return 'isWarmerEvent' in event
+def handle_ping(fn: Callable):
+    def handle_warm():
+        print(f'------ cache was active: {CACHE_KEY in MODEL_CACHE} ------')
+        if CACHE_KEY not in MODEL_CACHE:
+            print(f"[lambda_handler] model not cached")
+            MODEL_CACHE[CACHE_KEY] = Model(MODEL_PATH)
+        print(f'------ cache is now active: {CACHE_KEY in MODEL_CACHE} ------')
+        print(f'------ function is warm  ------')
+        return
+
+    def inner(*args, **kwargs):
+        event = args[0]
+        if 'isWarmerEvent' in event:
+            handle_warm()
+        else:
+            fn(*args, **kwargs)
+    return inner
 
 s3 = boto3.client('s3')
 s3_resource = boto3.resource('s3')
@@ -39,18 +54,10 @@ def get_audio_file(bucket_name: str, audio_s3_path: str) -> Tuple[float, Any]:
 
 # TODO: Should explore some of this writing too https://datatalks.club/blog/ml-deployment-lambda.html#future-enhancements-and-tradeoffs.
 @pjcommon.decorate_log_event
+@handle_ping
 @pjsns.unpack_sns_message
 @pjs3.handle_s3_notification_events('sns_payload')
 def lambda_handler(event, context, key: str, bucket_name: str, **kwargs):
-    if isPing(event):
-        print(f'------ cache was active: {CACHE_KEY in MODEL_CACHE} ------')
-        if CACHE_KEY not in MODEL_CACHE:
-            print(f"[lambda_handler] model not cached")
-            MODEL_CACHE[CACHE_KEY] = Model(MODEL_PATH)
-        print(f'------ cache is now active: {CACHE_KEY in MODEL_CACHE} ------')
-        print(f'------ function is warm  ------')
-        return
-
     # This function picks up transcoded audio drops within project directories
     project_id = pjs3.get_project_from_key(key)
     if not project_id or get_starting_dir(project_id) not in key:
