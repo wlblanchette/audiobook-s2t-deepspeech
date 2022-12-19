@@ -10,8 +10,5 @@ RUN yum install -y git
 # Install the python requirements from requirements.txt
 RUN python3.8 -m pip install -r requirements.txt
 
-# Create the model directory for mounting the EFS
-RUN mkdir -p /mnt/ml
-
 # Set the CMD to your handler
 CMD ["app.lambda_handler"]

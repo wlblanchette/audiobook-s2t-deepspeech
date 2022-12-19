@@ -7,7 +7,7 @@ from deepspeech import Model
 from timeit import default_timer as timer
 from typing import Dict, Tuple, Any
 
-from polyjuice_common import s3 as pjs3
+from polyjuice_common import s3 as pjs3, sns as pjsns, common as pjcommon
 
 from contract_parsing import metadata_json_output
 
@@ -26,6 +26,7 @@ def isPing(event):
     return 'isWarmerEvent' in event
 
 s3 = boto3.client('s3')
+s3_resource = boto3.resource('s3')
 
 def get_audio_file(bucket_name: str, audio_s3_path: str) -> Tuple[float, Any]:
     response = s3.get_object(Bucket=bucket_name, Key=audio_s3_path)
@@ -37,8 +38,10 @@ def get_audio_file(bucket_name: str, audio_s3_path: str) -> Tuple[float, Any]:
     return audio_length, audio_buffer
 
 # TODO: Should explore some of this writing too https://datatalks.club/blog/ml-deployment-lambda.html#future-enhancements-and-tradeoffs.
-@pjs3.handle_s3_notification_events
-def lambda_handler(event, context, key: str, bucket_name: str):
+@pjcommon.decorate_log_event
+@pjsns.unpack_sns_message
+@pjs3.handle_s3_notification_events('sns_payload')
+def lambda_handler(event, context, key: str, bucket_name: str, **kwargs):
     if isPing(event):
         print(f'------ cache was active: {CACHE_KEY in MODEL_CACHE} ------')
         if CACHE_KEY not in MODEL_CACHE:
@@ -96,7 +99,7 @@ def lambda_handler(event, context, key: str, bucket_name: str):
     (_, filename) = os.path.split(key)
     new_key = "/".join([get_output_dir(project_id), f"{filename}.json"])
 
-    s3object = s3.Object(bucket_name, new_key)
-    s3object.put(Body=bytes(json.dumps(json_output).encode('UTF-8')))
+    obj = s3_resource.Object(bucket_name, new_key)
+    obj.put(Body=bytes(json_output.encode('UTF-8')))
 
     return { 'statusCode': 200 }
